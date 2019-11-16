@@ -17,8 +17,8 @@ async def on_ready():
 async def help(ctx):
     embed = discord.Embed(title = "Help", colour = discord.Colour.gold())
     embed.set_footer(
-        text="Ilmoita bugeista jos jaksat | Akatixxc#2452", 
-        icon_url="https://cdn.discordapp.com/avatars/144805468458582016/33cda21905ed505a2c46a15be7c76b29.png?size=128"
+        text = "Ilmoita bugeista jos jaksat | Akatixxc#2452 | https://github.com/Akatixxc/IlmoBot", 
+        icon_url ="https://cdn.discordapp.com/avatars/144805468458582016/33cda21905ed505a2c46a15be7c76b29.png?size=128"
         )
     embed.add_field(name = ">ilmo", value = "Näyttää tämänhetkiset avoimet ilmoitukset")
     embed.add_field(name = ">________", value = "Joskus saatan jaksaa tehdä lisää mutta ei nyt kuitenkaan")
@@ -46,7 +46,12 @@ async def ilmo(ctx):
         link_to_ilmo = driver.find_element_by_partial_link_text(event_name)
         link_to_ilmo.click()
         pvm = driver.find_element_by_css_selector("span.is-inline-block").text.split("\n")[1]
-        embed.add_field(name = pvm, value = f"{event_name}  [[link]({driver.current_url})]")
+        participators = driver.find_element_by_css_selector("small.has-text-grey-light").text
+
+        embed.add_field(
+            name = pvm, 
+            value = f"{event_name} \n Osallistujat: {participators} [[link]({driver.current_url})]"
+            )
     
     message = await message.edit(embed = embed)
 
