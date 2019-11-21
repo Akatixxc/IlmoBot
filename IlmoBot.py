@@ -33,27 +33,32 @@ async def ilmo(ctx):
     driver.delete_all_cookies()
     driver.implicitly_wait(5)
     driver.get("https://digit.fi/ilmo")
-    ilmo = driver.find_element_by_css_selector("ul.menu-list").text.split("\n")
+    try:
+        ilmo = driver.find_element_by_css_selector("ul.menu-list").text.split("\n")
+        
+        embed = discord.Embed(colour = discord.Colour.gold())
+        embed.set_author(name = "Avoimet tapahtumat", 
+            url = "https://digit.fi/ilmo", 
+            icon_url = "https://cdn.discordapp.com/icons/346708564628471808/10d4b771cc25ddb0fde7d6844205edc6.png?size=128"
+        )
     
-    embed = discord.Embed(colour = discord.Colour.gold())
-    embed.set_author(name = "Tapahtumat", 
-        url = "https://digit.fi/ilmo", 
-        icon_url = "https://cdn.discordapp.com/icons/346708564628471808/10d4b771cc25ddb0fde7d6844205edc6.png?size=128"
-    )
+        for i in range(0, len(ilmo), 2):
+            event_name = ilmo[i]
+            link_to_ilmo = driver.find_element_by_partial_link_text(event_name)
+            link_to_ilmo.click()
+            pvm = driver.find_element_by_css_selector("span.is-inline-block").text.split("\n")[1]
+            participators = driver.find_element_by_css_selector("small.has-text-grey-light").text
 
-    for i in range(0, len(ilmo), 2):
-        event_name = ilmo[i]
-        link_to_ilmo = driver.find_element_by_partial_link_text(event_name)
-        link_to_ilmo.click()
-        pvm = driver.find_element_by_css_selector("span.is-inline-block").text.split("\n")[1]
-        participators = driver.find_element_by_css_selector("small.has-text-grey-light").text
-
-        embed.add_field(
-            name = pvm, 
-            value = f"{event_name} \n Osallistujat: {participators} [[link]({driver.current_url})]"
-            )
-    
-    message = await message.edit(embed = embed)
+            embed.add_field(
+                name = pvm, 
+                value = f"{event_name} \n Osallistujat: {participators} [[link]({driver.current_url})]",
+                inline = False
+                )
+            driver.back()
+        
+        message = await message.edit(embed = embed)
+    except:
+        message = await message.edit(embed = discord.Embed(title = "Ei tapahtumia.", color = discord.Colour.gold()))
 
 
 def create_driver_session(session_id, executor_url):
@@ -84,6 +89,7 @@ chrome_options.add_argument('--profile-directory=Default')
 chrome_options.add_argument("--incognito")
 chrome_options.add_argument("--disable-plugins-discovery")
 chrome_options.add_argument("--start-minimized")
+chrome_options.add_argument("--headless") # Comment out for debugging
 driver = webdriver.Chrome(chrome_options=chrome_options, executable_path="D:\\Tiedostot\\chromedriver_win32\\chromedriver.exe")
 
 executor_url = driver.command_executor._url
