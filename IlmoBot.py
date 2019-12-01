@@ -17,7 +17,7 @@ async def on_ready():
 async def help(ctx):
     embed = discord.Embed(title = "Help", colour = discord.Colour.gold())
     embed.set_footer(
-        text = "Ilmoita bugeista jos jaksat | Akatixxc#2452 | https://github.com/Akatixxc/IlmoBot", 
+        text = "Akatixxc#2452 | Ilmoita bugeista jos jaksat | https://github.com/Akatixxc/IlmoBot", 
         icon_url ="https://cdn.discordapp.com/avatars/144805468458582016/33cda21905ed505a2c46a15be7c76b29.png?size=128"
         )
     embed.add_field(name = ">ilmo", value = "Näyttää tämänhetkiset avoimet ilmoitukset")
@@ -89,8 +89,8 @@ chrome_options.add_argument('--profile-directory=Default')
 chrome_options.add_argument("--incognito")
 chrome_options.add_argument("--disable-plugins-discovery")
 chrome_options.add_argument("--start-minimized")
-chrome_options.add_argument("--headless") # Comment out for debugging
-driver = webdriver.Chrome(chrome_options=chrome_options, executable_path="D:\\Tiedostot\\chromedriver_win32\\chromedriver.exe")
+chrome_options.add_argument("--headless") # Comment out for debugging*/
+driver = webdriver.Chrome(chrome_options=chrome_options, executable_path="./chromedriver_win32/chromedriver")
 
 executor_url = driver.command_executor._url
 session_id = driver.session_id

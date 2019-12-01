@@ -104,3 +104,4 @@ venv.bak/
 .mypy_cache/
 KEY.txt
 IlmoBot.exe
+chromedriver_win32
